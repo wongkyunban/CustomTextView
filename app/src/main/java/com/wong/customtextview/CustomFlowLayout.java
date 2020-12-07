@@ -164,39 +164,38 @@ public class CustomFlowLayout extends ViewGroup {
         int maxWith = 0;
         int maxHeight = 0;
         int count = getChildCount();
-        if (count != 0) {
-            for (int i = 0; i < count; i++) {
-                View child = getChildAt(i);
-                MarginLayoutParams mlp = (MarginLayoutParams) child.getLayoutParams();
-                int childWidth = child.getMeasuredWidth() + mlp.rightMargin + mlp.rightMargin;
-                int childHeight = child.getMeasuredHeight() + mlp.topMargin + mlp.bottomMargin;
-                if (childWidth + rowWidth > getMeasuredWidth() - getPaddingLeft() - getPaddingRight()) {
-                    // 换行
-                    maxWith = Math.max(maxWith, rowWidth);
-                    rowWidth = childWidth;
-                    maxHeight += rowHeight;
-                    rowHeight = childHeight;
-                    mChildPos.add(new ChildPosition(
-                            getPaddingLeft() + mlp.leftMargin,
-                            getPaddingTop() + maxHeight + mlp.topMargin,
-                            getPaddingLeft() + childWidth - mlp.rightMargin,
-                            getPaddingTop() + maxHeight + childHeight - mlp.bottomMargin
-                    ));
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            MarginLayoutParams mlp = (MarginLayoutParams) child.getLayoutParams();
+            int childWidth = child.getMeasuredWidth() + mlp.rightMargin + mlp.rightMargin;
+            int childHeight = child.getMeasuredHeight() + mlp.topMargin + mlp.bottomMargin;
+            if (childWidth + rowWidth > getMeasuredWidth() - getPaddingLeft() - getPaddingRight()) {
+                // 换行
+                maxWith = Math.max(maxWith, rowWidth);
+                rowWidth = childWidth;
+                maxHeight += rowHeight;
+                rowHeight = childHeight;
+                mChildPos.add(new ChildPosition(
+                        getPaddingLeft() + mlp.leftMargin,
+                        getPaddingTop() + maxHeight + mlp.topMargin,
+                        getPaddingLeft() + childWidth - mlp.rightMargin,
+                        getPaddingTop() + maxHeight + childHeight - mlp.bottomMargin
+                ));
 
-                } else {
-                    // 不换行
-                    mChildPos.add(new ChildPosition(
-                            getPaddingLeft() + rowWidth + mlp.leftMargin,
-                            getPaddingTop() + maxHeight + mlp.topMargin,
-                            getPaddingLeft() + rowWidth + childWidth - mlp.rightMargin,
-                            getPaddingTop() + maxHeight + childHeight - mlp.bottomMargin
-                    ));
-                    rowWidth += childWidth;
-                    rowHeight = Math.max(childHeight, rowHeight);
+            } else {
+                // 不换行
+                mChildPos.add(new ChildPosition(
+                        getPaddingLeft() + rowWidth + mlp.leftMargin,
+                        getPaddingTop() + maxHeight + mlp.topMargin,
+                        getPaddingLeft() + rowWidth + childWidth - mlp.rightMargin,
+                        getPaddingTop() + maxHeight + childHeight - mlp.bottomMargin
+                ));
+                rowWidth += childWidth;
+                rowHeight = Math.max(childHeight, rowHeight);
 
-                }
             }
         }
+
         // 布局每一个child
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
